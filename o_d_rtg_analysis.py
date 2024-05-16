@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 def get_team_data(year) -> pd.DataFrame:
      """Cleans team data for a certain year"""
@@ -96,10 +97,23 @@ def o_d_rtg_analysis(year,playoff) -> tuple[int, int, int, int]: #
      o_diff_win_avg = game['o_diff_win'].sum() / len(game)
      d_diff_win_avg = game['d_diff_win'].sum() / len(game)
 
-
-     print(game)
+     print(game)    
      return (greater_o_win_percent,greater_d_win_percent,o_diff_win_avg,d_diff_win_avg)
 
+def win_loss_rtg_correlation(season):
+     """ Graphs win_loss_rtg correlation"""
+     df = pd.read_csv('DataSet/Team Summaries.csv')
+     df = df[df['season']==season]
+     plt.scatter(df['o_rtg'],df['w'], label = 'Offensive Rating')
+     plt.scatter(df['d_rtg'],df['w'], label = 'Defensive Rating')
+     for i, team_name in enumerate(df['abbreviation']):
+          plt.annotate(team_name, (df['o_rtg'][i], df['w'][i]), textcoords="offset points", xytext=(0,10), ha='center')
+          plt.annotate(team_name, (df['d_rtg'][i], df['w'][i]), textcoords="offset points", xytext=(0,10), ha='center')
+     plt.ylabel('Wins')
+     plt.xlabel('Offensive and Defensive Ratings')
+     plt.legend()
+     plt.show()
 
 if __name__ == "__main__":
-     print(o_d_rtg_analysis(2023,0))
+     print(o_d_rtg_analysis(2023,2))
+     win_loss_rtg_correlation(2023)
