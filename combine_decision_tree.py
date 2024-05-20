@@ -46,7 +46,6 @@ def decision_tree(position):
     y = df.iloc[:,13]
     x.dropna(inplace=True)#
     y=y[y.index.isin(x.index)]
-    print(len(x),len(y))
     
     x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.3, random_state=100)
 
@@ -56,7 +55,6 @@ def decision_tree(position):
 
     y_pred = dtc.predict(x_test)
     print(f" Accuracy score: {accuracy_score(y_test,y_pred)}")
-
     plt.figure(figsize=(12,8))
     tree.plot_tree(dtc.fit(x_train,y_train), feature_names = x_train.columns )
     plt.show()
