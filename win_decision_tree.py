@@ -113,13 +113,11 @@ def in_depth_past_win_regression():
               right_on=['season', 'abbreviation'], 
               suffixes=('', '_next_year'))
     df.drop(['previous_season', 'season_next_year','o_rtg','d_rtg'], axis=1, inplace=True)
-    print(df)
     x = df.iloc[:,2:9]
     y = df.iloc[:,-1]
     x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.2, random_state=42)
     clf = DecisionTreeClassifier(criterion='gini',min_samples_split = 3, max_depth = 3)
     clf.fit(x_train, y_train)
-    print(x)
     y_pred = clf.predict(x_test) 
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
@@ -160,6 +158,10 @@ def past_playoff_classification():
     dtc = DecisionTreeClassifier(criterion='gini',min_samples_split = 3, max_depth = 3)
     dtc.fit(x_train,y_train)
 
+    plt.figure(figsize=(12,8))
+    tree.plot_tree(dtc.fit(x_train,y_train), feature_names = x_train.columns )
+    plt.show()
+
     y_pred = dtc.predict(x_test)
     print(f" Accuracy score of past advanced stats to playoffs: {accuracy_score(y_test,y_pred)}")
     
@@ -176,6 +178,6 @@ def past_playoff_classification():
 if __name__ == '__main__':
     playoff_classifier() # decision tree classification
     win_regression() # decision tree regression
-    # past_win_regression() # linear regression
-    # in_depth_past_win_regression() # decision tree regression
+    past_win_regression() # linear regression
+    in_depth_past_win_regression() # decision tree regression
     past_playoff_classification() # decision tree classification
